@@ -1,6 +1,3 @@
 {
-    "[typescript]": {
-        "editor.tabSize": 4,
-        "editor.insertSpaces": false
-    }
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
 }
