@@ -28,8 +28,8 @@ Microsserviço em Node.js + TypeScript para enviar e-mails da plataforma IF-Tale
 1. Clone o repositório:
 
 ```
-git clone https://github.com/caio-cavalcante/if-talentos-notify-service.git
-cd if-talentos-notify-service
+git clone https://github.com/caio-cavalcante/notification-API.git
+cd notification-API
 ```
 
 2. Instale as dependências:
@@ -48,10 +48,55 @@ Preencha com suas informações (chave do Resend, e-mail de suporte, etc.).
 npm run dev
 ```
 
-A API vai rodar em `http://localhost:3000`.
+A API vai rodar em `http://localhost:3001`.
 
 ---
 
+## 🐳 Como rodar com Docker
+
+1. Construa a imagem:
+
+```
+docker build -t notifications-api .
+```
+
+2. Rode o container:
+
+```
+docker-compose up
+```
+
+A API ficará em `http://localhost:3000`.
+
+---
+
+## 🌐 Como testar
+
+Envie um POST para `/api/contact` com JSON:
+
+```
+{
+  "name": "Caio C.",
+  "email": "caio@email.com",
+  "message": "Gostaria de saber mais sobre vagas."
+}
+```
+
+- Se tudo der certo: `200 OK` com mensagem de sucesso.
+- Se tiver erro (e-mail inválido, etc.): `400 Bad Request` com a mensagem do erro.
+
+---
+
+## ☁️ Deploy no Render
+
+1. Conecte o repositório no Render.
+2. Configure:
+   - Build: `npm run build`
+   - Start: `npm start`
+3. Adicione as variáveis de ambiente (`.env`) no painel do Render.
+4. O serviço será acessado por uma URL como `https://if-talentos-notifications-api.onrender.com`.
+
+---
 ## 📚 Motivação
 
 > “No IF-Talentos, o envio de e-mails era feito direto no PHP e não funcionava direito.  
