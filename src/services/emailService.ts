@@ -1,39 +1,36 @@
-import nodemailer from 'nodemailer';
+import { Resend } from "resend";
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: true, // true para 465, false para outras portas
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-    },
-});
-
-interface SendMailDTO {
-    to: string;
-    subject: string;
-    html: string;
-    text?: string; // Fallback para clientes sem HTML
+interface SendEmailParams {
+    name: string;
+    email: string;
+    message: string;
 }
 
-export const sendEmail = async ({ to, subject, html, text }: SendMailDTO) => {
-    try {
-        const info = await transporter.sendMail({
-            from: `"IF-Talentos Notificações" <${process.env.EMAIL_FROM}>`,
-            to,
-            subject,
-            html,
-            text: text || html.replace(/<[^>]*>?/gm, ''), // Remove tags HTML para gerar texto simples
-        });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-        console.log(`📨 E-mail enviado: ${info.messageId}`);
-        return info;
-    } catch (error) {
-        console.error('❌ Erro ao enviar e-mail:', error);
-        throw new Error('Falha ao enviar e-mail');
+export async function sendEmail({ name, email, message }: SendEmailParams) {
+    if (!process.env.RESEND_API_KEY) {
+        throw new Error("RESEND_API_KEY não configurada");
     }
-};
+
+    try {
+        await resend.emails.send({
+            from: "contato@iftalentos.page",
+            to: [process.env.CONTACT_RECEIVER_EMAIL || "contato@iftalentos.page"],
+            subject: `Novo contato - ${name}`,
+            html: `
+                <h3>Nova mensagem do Fale Conosco - IF Talentos</h3>
+                <p><strong>Nome:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Mensagem:</strong></p>
+                <p>${message}</p>
+            `,
+        });
+    } catch (error) {
+        console.error("❌ Erro ao enviar e-mail (Resend):", error);
+        throw new Error("Falha ao enviar e-mail");
+    }
+}
