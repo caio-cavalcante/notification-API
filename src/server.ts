@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 // Configuração de CORS
 app.use(cors({
-  origin: 'https://iftalentos.page', 
+  origin: 'https://www.iftalentos.page', 
   methods: ['GET', 'POST']
 }));
 
