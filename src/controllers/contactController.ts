@@ -14,24 +14,10 @@ export const handleContact = async (req: Request, res: Response) => {
         // 1. Validação dos dados
         const { name, email, message } = contactSchema.parse(req.body);
 
-        // 2. Montagem do corpo do e-mail
-        const emailHtml = `
-            <h3>Nova mensagem do Fale Conosco - IF Talentos</h3>
-            <p><strong>Nome:</strong> ${name}</p>
-            <p><strong>E-mail:</strong> ${email}</p>
-            <hr />
-            <p><strong>Mensagem:</strong></p>
-            <p>${message}</p>
-        `;
+        // 2. Envio do e-mail
+        await sendEmail({ name, email, message });
 
-        // 3. Envio do e-mail
-        await sendEmail({
-            to: process.env.EMAIL_SUPPORT as string, // Definido no .env
-            subject: `[Fale Conosco] Contato de ${name}`,
-            html: emailHtml,
-        });
-
-        // 4. Resposta de sucesso
+        // 3. Resposta de sucesso
         return res.status(200).json({
             success: true,
             message:
