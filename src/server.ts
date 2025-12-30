@@ -14,6 +14,9 @@ app.use(cors({
   methods: ['GET', 'POST']
 }));
 
+// Configuração de proxy
+app.set("trust proxy", 1);
+
 // Body Parser para JSON
 app.use(express.json());
 
