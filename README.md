@@ -17,7 +17,7 @@ Microsserviço em Node.js + TypeScript para enviar e-mails da plataforma IF-Tale
 - Node.js + TypeScript
 - Express (para criar a API)
 - Zod (para validar os dados)
-- Nodemailer + Resend (para enviar e-mails)
+- Resend (para enviar e-mails)
 - Docker (para rodar em container)
 - Render (para hospedar a API)
 
